@@ -1,0 +1,56 @@
+/* 
+ Author Laxman Sharma
+Cycle detection undirected graph
+ input format
+ V --> no. of vertices
+ E --> no. of edges
+ next E line contains
+ u, v there is edge between u to v
+ edges are undirected.
+*/
+
+#include<bits/stdc++.h>
+using namespace std;
+class Solution {
+  public:
+    // Function to detect cycle in an undirected graph.
+    bool isContainsCycle(int s, int p, vector<vector<int>> &adj, vector<bool> &vis) {
+        vis[s] = true;
+        for(int child: adj[s]) {
+            if(child == p) continue;
+            if(vis[child]) return true;
+            if(isContainsCycle(child, s, adj, vis)) return true;
+        }
+        return false;
+    }
+    bool isCycle(int V, vector<int> adj[]) {
+        vector<vector<int>> graph;
+        for(int i=0;i<V;i++) {
+            graph.push_back(adj[i]);
+        }
+        vector<bool> vis(V, false);
+        for(int i=0;i<V;i++) {
+            if(vis[i] == false) {
+                if(isContainsCycle(i, -1, graph, vis)) return true;
+            }
+        }
+        return false;
+    }
+};
+
+int main() {
+	int V, E;
+	cin>>V>>E;
+	vector<int> adj[V];
+	for(int i=0;i<E;i++) {
+		int u,v;
+		cin>>u>>v;
+		adj[u].push_back(v);
+		adj[v].push_back(u);
+	}
+
+	Solution obj;
+	bool res = obj.isCycle(V, adj);
+	if(res) cout<<"contains cycle"<<endl;
+	else cout<<"not contains cycle"<<endl;
+}
